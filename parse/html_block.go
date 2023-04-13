@@ -12,9 +12,9 @@ package parse
 
 import (
 	"bytes"
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // HtmlBlockStart 判断 HTML 块（<）是否开始。

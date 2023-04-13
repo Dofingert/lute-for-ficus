@@ -11,7 +11,7 @@
 package parse
 
 import (
-	"github.com/88250/lute/ast"
+	"github.com/Dofingert/lute-for-ficus/ast"
 )
 
 // parseInlines 解析并生成行级节点。

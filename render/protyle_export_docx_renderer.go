@@ -17,12 +17,12 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 type ProtyleExportDocxRenderer struct {
@@ -75,6 +75,7 @@ func NewProtyleExportDocxRenderer(tree *parse.Tree, options *Options) *ProtyleEx
 	ret.RendererFuncs[ast.NodeInlineHTML] = ret.renderInlineHTML
 	ret.RendererFuncs[ast.NodeLink] = ret.renderLink
 	ret.RendererFuncs[ast.NodeImage] = ret.renderImage
+	// ret.RendererFuncs[ast.NodeMDlink] = ret.renderMDlink
 	ret.RendererFuncs[ast.NodeBang] = ret.renderBang
 	ret.RendererFuncs[ast.NodeOpenBracket] = ret.renderOpenBracket
 	ret.RendererFuncs[ast.NodeCloseBracket] = ret.renderCloseBracket
@@ -1029,6 +1030,33 @@ func (r *ProtyleExportDocxRenderer) renderImage(node *ast.Node, entering bool) a
 }
 
 func (r *ProtyleExportDocxRenderer) renderLink(node *ast.Node, entering bool) ast.WalkStatus {
+	if entering {
+		r.LinkTextAutoSpacePrevious(node)
+
+		dest := node.ChildByType(ast.NodeLinkDest)
+		destTokens := dest.Tokens
+		if r.Options.Sanitize {
+			tokens := bytes.TrimSpace(destTokens)
+			tokens = bytes.ToLower(tokens)
+			if bytes.HasPrefix(tokens, []byte("javascript:")) {
+				destTokens = nil
+			}
+		}
+		destTokens = r.LinkPath(destTokens)
+		attrs := [][]string{{"href", util.BytesToStr(html.EscapeHTML(destTokens))}}
+		if title := node.ChildByType(ast.NodeLinkTitle); nil != title && nil != title.Tokens {
+			attrs = append(attrs, []string{"title", util.BytesToStr(html.EscapeHTML(title.Tokens))})
+		}
+		r.Tag("a class='ficus-filelink'", attrs, false)
+	} else {
+		r.Tag("/a", nil, false)
+
+		r.LinkTextAutoSpaceNext(node)
+	}
+	return ast.WalkContinue
+}
+
+func (r *ProtyleExportDocxRenderer) renderMDLink(node *ast.Node, entering bool) ast.WalkStatus {
 	if entering {
 		r.LinkTextAutoSpacePrevious(node)
 

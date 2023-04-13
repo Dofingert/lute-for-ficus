@@ -14,10 +14,10 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/lex"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/lex"
 )
 
 // CustomBlockStart 判断围栏自定义块（;;;）是否开始。

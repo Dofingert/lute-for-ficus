@@ -14,7 +14,7 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 func main() {

@@ -14,11 +14,11 @@ import (
 	"bytes"
 	"strconv"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // parseInline 解析并生成块节点 block 的行级子节点。
@@ -39,6 +39,8 @@ func (t *Tree) parseInline(block *ast.Node, ctx *InlineContext) {
 			} else {
 				n = t.parseText(ctx)
 			}
+		case lex.ItemHyphen:
+			n = t.parseHyphen(ctx)
 		case lex.ItemNewline:
 			n = t.parseNewline(block, ctx)
 		case lex.ItemLess:
@@ -152,6 +154,7 @@ func (t *Tree) parseCloseBracket(ctx *InlineContext) *ast.Node {
 	}
 
 	isImage := opener.image
+	isMDLink := opener.MDlink
 
 	// 检查是否满足链接或者图片规则
 
@@ -307,6 +310,11 @@ func (t *Tree) parseCloseBracket(ctx *InlineContext) *ast.Node {
 			node.AppendChild(&ast.Node{Type: ast.NodeBang, Tokens: opener.node.Tokens[:1]})
 			opener.node.Tokens = opener.node.Tokens[1:]
 		}
+		if isMDLink {
+			node.Type = ast.NodeMDlink
+			node.AppendChild(&ast.Node{Type: ast.NodeCaret, Tokens: opener.node.Tokens[:1]})
+			opener.node.Tokens = opener.node.Tokens[1:]
+		}
 		node.AppendChild(&ast.Node{Type: ast.NodeOpenBracket, Tokens: opener.node.Tokens})
 
 		var tmp, next *ast.Node
@@ -337,7 +345,7 @@ func (t *Tree) parseCloseBracket(ctx *InlineContext) *ast.Node {
 		// We remove this bracket and processEmphasis will remove later delimiters.
 		// Now, for a link, we also deactivate earlier link openers.
 		// (no links in links)
-		if !isImage {
+		if !isImage && !isMDLink {
 			opener = ctx.brackets
 			for nil != opener {
 				if !opener.image {
@@ -360,11 +368,11 @@ func (t *Tree) parseOpenBracket(ctx *InlineContext) (ret *ast.Node) {
 	ctx.pos++
 	ret = &ast.Node{Type: ast.NodeText, Tokens: ctx.tokens[startPos:ctx.pos]}
 	// 将 [ 入栈
-	t.addBracket(ret, ctx.pos-1, false, ctx)
+	t.addBracket(ret, ctx.pos-1, false, false, ctx)
 	return
 }
 
-func (t *Tree) addBracket(node *ast.Node, index int, image bool, ctx *InlineContext) {
+func (t *Tree) addBracket(node *ast.Node, index int, image bool, MDlink bool, ctx *InlineContext) {
 	if nil != ctx.brackets {
 		ctx.brackets.bracketAfter = true
 	}
@@ -375,6 +383,7 @@ func (t *Tree) addBracket(node *ast.Node, index int, image bool, ctx *InlineCont
 		previousDelimiter: ctx.delimiters,
 		index:             index,
 		image:             image,
+		MDlink:			   MDlink,
 		active:            true,
 	}
 }

@@ -5,7 +5,7 @@
 package html
 
 import (
-	"github.com/88250/lute/html/atom"
+	"github.com/Dofingert/lute-for-ficus/html/atom"
 )
 
 // A NodeType is the type of a Node.

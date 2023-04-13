@@ -13,14 +13,14 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 var mathTests = []parseTest{
 
 	{"14", "$ $\n", "<p>$ $</p>\n"},
 
-	// 解析问题 10$ https://github.com/88250/lute/issues/1
+	// 解析问题 10$ https://github.com/Dofingert/lute-for-ficus/issues/1
 	{"解析问题 10$", "10$\n", "<p>10$</p>\n"},
 
 	{"13", "$$a^2 + b^2 = \\color{red}c^2$$\n## foo\n", "<div class=\"language-math\">a^2 + b^2 = \\color{red}c^2</div>\n<h2 id=\"foo\">foo</h2>\n"},

@@ -13,9 +13,9 @@ package parse
 import (
 	"bytes"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // emoji 将 node 下文本节点和链接文本节点中的 Emoji 别名替换为原生 Unicode 字符。

@@ -13,8 +13,8 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
-	"github.com/88250/lute/render"
+	"github.com/Dofingert/lute-for-ficus"
+	"github.com/Dofingert/lute-for-ficus/render"
 )
 
 var sanitizerTests = []parseTest{

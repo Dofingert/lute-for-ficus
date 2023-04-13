@@ -13,10 +13,10 @@ package parse
 import (
 	"unicode/utf8"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 func (context *Context) parseLinkRefDef(tokens []byte) []byte {

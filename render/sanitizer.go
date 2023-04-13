@@ -16,9 +16,9 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // 没有实现可扩展的策略，仅过滤不安全的标签和属性。

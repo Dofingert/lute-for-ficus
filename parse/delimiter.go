@@ -14,9 +14,9 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/lex"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/lex"
 )
 
 // delimiter 描述了强调、链接和图片解析过程中用到的分隔符（[, ![, *, _, ~）相关信息。
@@ -31,6 +31,8 @@ type delimiter struct {
 
 	active            bool
 	image             bool
+	MDlink			  bool
+
 	bracketAfter      bool
 	index             int
 	previousDelimiter *delimiter

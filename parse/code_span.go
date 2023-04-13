@@ -13,8 +13,8 @@ package parse
 import (
 	"bytes"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
 )
 
 func (t *Tree) parseCodeSpan(block *ast.Node, ctx *InlineContext) (ret *ast.Node) {
@@ -54,7 +54,7 @@ func (t *Tree) parseCodeSpan(block *ast.Node, ctx *InlineContext) (ret *ast.Node
 
 	if t.Context.ParseOption.GFMTable {
 		if ast.NodeTableCell == block.Type {
-			// 表格中的代码中带有管道符的处理 https://github.com/88250/lute/issues/63
+			// 表格中的代码中带有管道符的处理 https://github.com/Dofingert/lute-for-ficus/issues/63
 			textTokens = bytes.ReplaceAll(textTokens, []byte("\\|"), []byte("|"))
 		}
 	}

@@ -13,14 +13,14 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 var emojiTests = []parseTest{
 
 	{"22", ":siyuan:", "<p><img alt=\"siyuan\" class=\"emoji\" src=\"https://unpkg.com/vditor/dist/images/emoji/siyuan.svg\" title=\"siyuan\" /></p>\n"},
 
-	// 链接文本节点内 Emoji 的解析 https://github.com/88250/lute/issues/76
+	// 链接文本节点内 Emoji 的解析 https://github.com/Dofingert/lute-for-ficus/issues/76
 	{"21", "[foo *:star:*](bar)", "<p><a href=\"bar\">foo <em>⭐️</em></a></p>\n"},
 	{"20", "[foo :octocat:](bar)", "<p><a href=\"bar\">foo <img alt=\"octocat\" class=\"emoji\" src=\"https://unpkg.com/vditor/dist/images/emoji/octocat.png\" title=\"octocat\" /></a></p>\n"},
 	{"19", "[foo :star:](bar)", "<p><a href=\"bar\">foo ⭐️</a></p>\n"},

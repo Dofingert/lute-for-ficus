@@ -14,7 +14,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/88250/lute/html"
+	"github.com/Dofingert/lute-for-ficus/html"
 )
 
 func TestLinkDestEncode(t *testing.T) {

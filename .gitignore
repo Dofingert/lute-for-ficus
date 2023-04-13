@@ -11,3 +11,6 @@ profile*.png
 # https://github.com/b3log/header
 header
 header.exe
+
+# build dir
+build

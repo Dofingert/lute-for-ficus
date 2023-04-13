@@ -13,7 +13,7 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 var spaceTests = []parseTest{
@@ -28,16 +28,16 @@ var spaceTests = []parseTest{
 	{"39", "中1==标记==1文", "<p>中 1 <mark>标记</mark> 1 文</p>\n"},
 	{"38", "中==标记==文", "<p>中<mark>标记</mark>文</p>\n"},
 
-	// 汉语拼音中文空格问题 https://github.com/88250/lute/issues/86
+	// 汉语拼音中文空格问题 https://github.com/Dofingert/lute-for-ficus/issues/86
 	{"37", "中yā文", "<p>中 yā 文</p>\n"},
 
-	// 井号 # 前后自动空格问题 https://github.com/88250/lute/issues/62
+	// 井号 # 前后自动空格问题 https://github.com/Dofingert/lute-for-ficus/issues/62
 	{"36", "前#foo", "<p>前#foo</p>\n"},
 	{"35", "foo#后", "<p>foo#后</p>\n"},
 	{"34", "foo#bar", "<p>foo#bar</p>\n"},
 	{"33", "前#后", "<p>前#后</p>\n"},
 
-	// 加粗、强调和删除线自动空格改进 https://github.com/88250/lute/issues/25
+	// 加粗、强调和删除线自动空格改进 https://github.com/Dofingert/lute-for-ficus/issues/25
 	{"32", "数字~1链滴2~需要", "<p>数字 <del>1 链滴 2</del> 需要</p>\n"},
 	{"32", "数字*1链滴2*需要", "<p>数字 <em>1 链滴 2</em> 需要</p>\n"},
 	{"31", "中文 **链滴** 不需要", "<p>中文 <strong>链滴</strong> 不需要</p>\n"},
@@ -47,7 +47,7 @@ var spaceTests = []parseTest{
 	{"27", "中文**链滴**不需要", "<p>中文<strong>链滴</strong>不需要</p>\n"},
 	{"26", "**链滴HacPai**需要", "<p><strong>链滴 HacPai</strong> 需要</p>\n"},
 
-	// 链接前后自动空格改进 https://github.com/88250/lute/issues/24
+	// 链接前后自动空格改进 https://github.com/Dofingert/lute-for-ficus/issues/24
 	{"25", "中文 [链滴](https://ld246.com) 不需要", "<p>中文 <a href=\"https://ld246.com\">链滴</a> 不需要</p>\n"},
 	{"24", "数字[1链滴2](https://ld246.com)需要", "<p>数字 <a href=\"https://ld246.com\">1 链滴 2</a> 需要</p>\n"},
 	{"23", "英文1[HacPai](https://ld246.com)2需要", "<p>英文 1<a href=\"https://ld246.com\">HacPai</a>2 需要</p>\n"},
@@ -58,7 +58,7 @@ var spaceTests = []parseTest{
 	{"19", "测试ping空格", "<p>测试 ping 空格</p>\n"},
 	{"18", "foo❤️bar", "<p>foo❤️bar</p>\n"},
 
-	// ing 前不需要空格，如 打码ing https://github.com/88250/lute/issues/9
+	// ing 前不需要空格，如 打码ing https://github.com/Dofingert/lute-for-ficus/issues/9
 	{"17", "打码ing开源", "<p>打码ing 开源</p>\n"},
 	{"16", "打码in", "<p>打码 in</p>\n"},
 	{"15", "打码ing", "<p>打码ing</p>\n"},

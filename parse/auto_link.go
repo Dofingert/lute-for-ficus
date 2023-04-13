@@ -15,11 +15,11 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 func (t *Tree) parseGFMAutoEmailLink(node *ast.Node) {
@@ -357,7 +357,7 @@ func (t *Tree) parseGFMAutoLink0(node *ast.Node) {
 
 			// 如果之前的 ) 或者 ; 没有命中处理，则进行结尾的标点符号规则处理，即标点不计入链接，需要剔掉
 			if !trimmed && lex.IsASCIIPunct(lastToken) && lex.ItemSlash != lastToken &&
-				'}' != lastToken && '{' != lastToken /* 自动链接解析结尾 } 问题 https://github.com/88250/lute/issues/4 */ {
+				'}' != lastToken && '{' != lastToken /* 自动链接解析结尾 } 问题 https://github.com/Dofingert/lute-for-ficus/issues/4 */ {
 				path = path[:length-1]
 				i--
 			}
@@ -381,7 +381,7 @@ func (t *Tree) parseGFMAutoLink0(node *ast.Node) {
 		addr = append(addr, path...)
 		linkText := addr
 		if bytes.HasPrefix(linkText, []byte("https://github.com/")) && bytes.Contains(linkText, []byte("/issues/")) {
-			// 优化 GitHub Issues 自动链接文本 https://github.com/88250/lute/issues/161
+			// 优化 GitHub Issues 自动链接文本 https://github.com/Dofingert/lute-for-ficus/issues/161
 			repo := linkText[len("https://github.com/"):]
 			repo = repo[:bytes.Index(repo, []byte("/issues/"))]
 			num := bytes.Split(linkText, []byte("/issues/"))[1]
@@ -542,6 +542,9 @@ func (t *Tree) newLink(typ ast.NodeType, text, dest, title []byte, linkType int)
 	ret = &ast.Node{Type: typ, LinkType: linkType}
 	if ast.NodeImage == typ {
 		ret.AppendChild(&ast.Node{Type: ast.NodeBang})
+	}
+	if ast.NodeMDlink == typ {
+		ret.AppendChild(&ast.Node{Type: ast.NodeCaret})
 	}
 	ret.AppendChild(&ast.Node{Type: ast.NodeOpenBracket})
 	ret.AppendChild(&ast.Node{Type: ast.NodeLinkText, Tokens: text})

@@ -14,7 +14,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/88250/lute/editor"
+	"github.com/Dofingert/lute-for-ficus/editor"
 )
 
 // Space 会把 tokens 中的中西文之间加上空格。
@@ -31,7 +31,7 @@ func Space0(text string) (ret string) {
 	for i := 0; i < length; {
 		r = runes[i]
 		if i < length-3 && 'i' == runes[i+1] && 'n' == runes[i+2] && 'g' == runes[i+3] && unicode.Is(unicode.Han, runes[i]) {
-			// ing 前不需要空格，如 打码ing https://github.com/88250/lute/issues/9
+			// ing 前不需要空格，如 打码ing https://github.com/Dofingert/lute-for-ficus/issues/9
 			ret += string(r) + "ing"
 			i += 4
 			continue

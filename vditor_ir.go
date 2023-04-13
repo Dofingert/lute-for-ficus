@@ -15,13 +15,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/html/atom"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/render"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/html/atom"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/render"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // SpinVditorIRDOM 自旋 Vditor Instant-Rendering DOM，用于即时渲染模式下的编辑。
@@ -545,6 +545,12 @@ func (lute *Lute) genASTByVditorIRDOM(n *html.Node, tree *parse.Tree) {
 		tree.Context.Tip = node
 		defer tree.Context.ParentTip()
 	case atom.A:
+		if "ficus-filelink" == class {
+			node.Type = ast.NodeMDlink
+			node.AppendChild(&ast.Node{Type: ast.NodeCaret})
+		} else {
+			node.Type = ast.NodeLink
+		}
 		node.Type = ast.NodeLink
 		node.AppendChild(&ast.Node{Type: ast.NodeOpenBracket})
 		tree.Context.Tip.AppendChild(node)

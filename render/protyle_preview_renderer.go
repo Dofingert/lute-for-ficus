@@ -17,12 +17,12 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 type ProtylePreviewRenderer struct {
@@ -75,6 +75,7 @@ func NewProtylePreviewRenderer(tree *parse.Tree, options *Options) *ProtylePrevi
 	ret.RendererFuncs[ast.NodeInlineHTML] = ret.renderInlineHTML
 	ret.RendererFuncs[ast.NodeLink] = ret.renderLink
 	ret.RendererFuncs[ast.NodeImage] = ret.renderImage
+	// ret.RendererFuncs[ast.NodeMDlink] = ret.renderMDlink
 	ret.RendererFuncs[ast.NodeBang] = ret.renderBang
 	ret.RendererFuncs[ast.NodeOpenBracket] = ret.renderOpenBracket
 	ret.RendererFuncs[ast.NodeCloseBracket] = ret.renderCloseBracket

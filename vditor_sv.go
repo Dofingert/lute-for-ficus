@@ -13,9 +13,9 @@ package lute
 import (
 	"strings"
 
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/render"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/render"
 )
 
 // SpinVditorSVDOM 自旋 Vditor Split-View DOM，用于分屏预览模式下的编辑。

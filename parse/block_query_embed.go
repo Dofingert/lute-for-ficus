@@ -13,8 +13,8 @@ package parse
 import (
 	"bytes"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
 )
 
 // BlockQueryEmbedStart 判断内容块查询嵌入（{{ SELECT * FROM blocks WHERE content LIKE '%待办%' }}）是否开始。

@@ -14,10 +14,10 @@ import (
 	"bytes"
 	"unicode/utf8"
 
-	"github.com/88250/lute/html"
+	"github.com/Dofingert/lute-for-ficus/html"
 
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 func (context *Context) parseInlineLinkDest(tokens []byte) (passed, remains, destination []byte) {

@@ -14,10 +14,10 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // IALStart 判断 kramdown 块级内联属性列表（{: attrs}）是否开始。
@@ -181,7 +181,7 @@ func (t *Tree) parseKramdownSpanIAL() {
 		}
 
 		switch n.Type {
-		case ast.NodeEmphasis, ast.NodeStrong, ast.NodeCodeSpan, ast.NodeStrikethrough, ast.NodeTag, ast.NodeMark, ast.NodeImage, ast.NodeTextMark:
+		case ast.NodeEmphasis, ast.NodeStrong, ast.NodeCodeSpan, ast.NodeStrikethrough, ast.NodeTag, ast.NodeMark, ast.NodeImage, ast.NodeMDlink, ast.NodeTextMark:
 			break
 		default:
 			return ast.WalkContinue

@@ -15,13 +15,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/html/atom"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/render"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/html/atom"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/render"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // Md2HTML 将 markdown 转换为标准 HTML，用于源码模式预览。
@@ -114,6 +114,28 @@ func (lute *Lute) HTML2Md(html string) (markdown string) {
 	return
 }
 
+// func searchSpanFiliter(htmlStr string)(htmlRet string) {
+// 	for r := string.Index(htmlStr,"<span class=\"vditor-search__result\">") && r != -1 {
+// 		htmlStr = string(htmlStr, "<span class=\"vditor-search__result\">", "", 1)
+// 		depth := 0
+// 		for i := r; i < len(htmlStr); i++ {
+// 			if(htmlStr[i] == '<') {
+// 				if(depth == 0 && htmlStr[i+1] == '/' && htmlStr[i+2] == 's' && htmlStr[i+3] == 'p' && htmlStr[i+4] == 'a' && htmlStr[i+5] == 'n' && htmlStr[i+6] == '>') {
+// 					for j := i; j < 7 + i ; j++ {
+// 						htmlStr[j] = ' '
+// 					}
+// 				} else {
+// 					if(htmlStr[i+1] == '/') {
+// 						depth -= 1
+// 					} else {
+// 						depth += 1
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+
 func (lute *Lute) vditorDOM2Md(htmlStr string) (markdown string) {
 	// 删掉插入符
 	htmlStr = strings.ReplaceAll(htmlStr, editor.FrontEndCaret, "")
@@ -121,6 +143,7 @@ func (lute *Lute) vditorDOM2Md(htmlStr string) (markdown string) {
 	// 替换结尾空白，否则 HTML 解析会产生冗余节点导致生成空的代码块
 	htmlStr = strings.ReplaceAll(htmlStr, "\t\n", "\n")
 	htmlStr = strings.ReplaceAll(htmlStr, "    \n", "  \n")
+	// htmlStr = searchSpanFiliter(htmlStr)
 
 	// 将字符串解析为 DOM 树
 	htmlRoot := lute.parseHTML(htmlStr)
@@ -252,6 +275,17 @@ func (lute *Lute) hljsSpans(n *html.Node, spans *[]*html.Node) {
 		*spans = append(*spans, n)
 		text := util.DomText(n)
 		n.InsertBefore(&html.Node{Type: html.TextNode, Data: text})
+	}
+	if atom.Span == n.DataAtom && strings.HasPrefix(util.DomAttrValue(n, "class"), "vditor-search") {
+		*spans = append(*spans, n)
+		text := util.DomText(n)
+		if nil != n.PrevSibling {
+			n.PrevSibling.Data += text
+		} else if nil != n.NextSibling {
+			n.NextSibling.Data = text + n.NextSibling.Data
+		} else {
+			n.InsertBefore(&html.Node{Type: html.TextNode, Data: text})
+		}
 	}
 
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
@@ -510,6 +544,19 @@ func (lute *Lute) isTightList(list *html.Node) string {
 
 	}
 	return "true"
+}
+
+func retrivalCodeTree(n *html.Node) string {
+	oriStr := ""
+	siblings := n.FirstChild
+	for siblings != nil {
+		if siblings.DataAtom != atom.Span {
+			oriStr += siblings.Data
+		}
+		oriStr += retrivalCodeTree(siblings)
+		siblings = siblings.NextSibling 
+	}
+	return oriStr
 }
 
 // genASTByVditorDOM 根据指定的 Vditor DOM 节点 n 进行深度优先遍历并逐步生成 Markdown 语法树 tree。
@@ -996,7 +1043,8 @@ func (lute *Lute) genASTByVditorDOM(n *html.Node, tree *parse.Tree) {
 		if nil == n.FirstChild {
 			return
 		}
-		contentStr := strings.ReplaceAll(n.FirstChild.Data, editor.Zwsp, "")
+		oriStr := retrivalCodeTree(n)
+		contentStr := strings.ReplaceAll(oriStr, editor.Zwsp, "")
 		if editor.Caret == contentStr {
 			node.Tokens = editor.CaretTokens
 			tree.Context.Tip.AppendChild(node)
@@ -1067,8 +1115,13 @@ func (lute *Lute) genASTByVditorDOM(n *html.Node, tree *parse.Tree) {
 				return
 			}
 		}
+		if "ficus-filelink" == class {
+			node.Type = ast.NodeMDlink
+			node.AppendChild(&ast.Node{Type: ast.NodeCaret})
+		} else {
+			node.Type = ast.NodeLink
+		}
 
-		node.Type = ast.NodeLink
 		node.AppendChild(&ast.Node{Type: ast.NodeOpenBracket})
 		tree.Context.Tip.AppendChild(node)
 		tree.Context.Tip = node

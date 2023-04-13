@@ -13,8 +13,8 @@ package parse
 import (
 	"strings"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/html"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/html"
 )
 
 // NestedInlines2FlattedSpansHybrid 将嵌套的行级节点转换为平铺的文本标记节点。
@@ -30,7 +30,10 @@ func NestedInlines2FlattedSpansHybrid(tree *Tree) {
 			// 超链接嵌套图片情况下，图片子节点移到超链接节点前面
 			img := n.ChildByType(ast.NodeImage)
 			if nil == img {
-				return ast.WalkContinue
+				img := n.ChildByType(ast.NodeMDlink)
+				if nil == img {
+					return ast.WalkContinue
+				}
 			}
 			n.InsertBefore(img)
 			if nil == n.ChildByType(ast.NodeLinkText) {
@@ -107,7 +110,7 @@ func NestedInlines2FlattedSpansHybrid(tree *Tree) {
 					}
 
 					span.TextMarkBlockRefID = n.Parent.ChildByType(ast.NodeBlockRefID).TokensStr()
-				} else if n.ParentIs(ast.NodeLink) && !n.ParentIs(ast.NodeImage) {
+				} else if n.ParentIs(ast.NodeLink) && !n.ParentIs(ast.NodeImage) && !n.ParentIs(ast.NodeMDlink) {
 					if next := n.Next; nil != next && ast.NodeLinkText == next.Type {
 						// 合并相邻的链接文本节点
 						n.Next.PrependTokens(n.Tokens)
@@ -186,7 +189,10 @@ func NestedInlines2FlattedSpans(tree *Tree) {
 			// 超链接嵌套图片情况下，图片子节点移到超链接节点前面
 			img := n.ChildByType(ast.NodeImage)
 			if nil == img {
-				return ast.WalkContinue
+				img := n.ChildByType(ast.NodeMDlink)
+				if nil == img {
+					return ast.WalkContinue
+				}
 			}
 			n.InsertBefore(img)
 			if nil == n.ChildByType(ast.NodeLinkText) {
@@ -282,7 +288,7 @@ func NestedInlines2FlattedSpans(tree *Tree) {
 					}
 
 					span.TextMarkBlockRefID = n.Parent.ChildByType(ast.NodeBlockRefID).TokensStr()
-				} else if n.ParentIs(ast.NodeLink) && !n.ParentIs(ast.NodeImage) {
+				} else if n.ParentIs(ast.NodeLink) && !n.ParentIs(ast.NodeImage) && !n.ParentIs(ast.NodeMDlink) {
 					if next := n.Next; nil != next && ast.NodeLinkText == next.Type {
 						// 合并相邻的链接文本节点
 						n.Next.PrependTokens(n.Tokens)

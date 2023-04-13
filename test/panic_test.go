@@ -11,7 +11,7 @@
 package test
 
 import (
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/util"
 	"sync"
 	"testing"
 )

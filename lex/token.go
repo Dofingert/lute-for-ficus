@@ -432,7 +432,7 @@ func IsProtyleInlineMarker(token byte) bool {
 
 func IsMarker(token byte) bool {
 	switch token {
-	case ItemAsterisk, ItemUnderscore, ItemOpenBracket, ItemBang, ItemNewline, ItemBackslash, ItemBacktick, ItemLess,
+	case ItemHyphen, ItemAsterisk, ItemUnderscore, ItemOpenBracket, ItemBang, ItemNewline, ItemBackslash, ItemBacktick, ItemLess,
 		ItemCloseBracket, ItemAmpersand, ItemTilde, ItemDollar, ItemOpenBrace, ItemOpenParen, ItemEqual, ItemCrosshatch:
 		return true
 	default:

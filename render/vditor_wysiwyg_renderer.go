@@ -17,13 +17,13 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // VditorRenderer 描述了 Vditor WYSIWYG DOM 渲染器。
@@ -79,6 +79,8 @@ func NewVditorRenderer(tree *parse.Tree, options *Options) *VditorRenderer {
 	ret.RendererFuncs[ast.NodeInlineHTML] = ret.renderInlineHTML
 	ret.RendererFuncs[ast.NodeLink] = ret.renderLink
 	ret.RendererFuncs[ast.NodeImage] = ret.renderImage
+	ret.RendererFuncs[ast.NodeMDlink] = ret.renderMDlink
+	ret.RendererFuncs[ast.NodeCaret] = ret.renderCaret
 	ret.RendererFuncs[ast.NodeBang] = ret.renderBang
 	ret.RendererFuncs[ast.NodeOpenBracket] = ret.renderOpenBracket
 	ret.RendererFuncs[ast.NodeCloseBracket] = ret.renderCloseBracket
@@ -637,6 +639,65 @@ func (r *VditorRenderer) renderOpenBracket(node *ast.Node, entering bool) ast.Wa
 }
 
 func (r *VditorRenderer) renderBang(node *ast.Node, entering bool) ast.WalkStatus {
+	return ast.WalkContinue
+}
+
+func (r *VditorRenderer) renderCaret(node *ast.Node, entering bool) ast.WalkStatus {
+	return ast.WalkContinue
+}
+
+func (r *VditorRenderer) renderMDlink(node *ast.Node, entering bool) ast.WalkStatus {
+	if 3 == node.LinkType {
+		if entering {
+			previousNodeText := node.PreviousNodeText()
+			previousNodeText = strings.ReplaceAll(previousNodeText, editor.Caret, "")
+			if "" == previousNodeText {
+				r.WriteString(editor.Zwsp)
+			}
+
+			linkText := node.ChildrenByType(ast.NodeLinkText)
+			var text string
+			if 0 < len(linkText) {
+				text = string(linkText[0].Tokens)
+			}
+			label := string(node.LinkRefLabel)
+			attrs := [][]string{{"data-type", "link-ref"}, {"data-link-label", label}}
+			r.Tag("span", attrs, false)
+			r.WriteString(text)
+			r.Tag("/span", nil, false)
+			r.WriteString(editor.Zwsp)
+			return ast.WalkSkipChildren
+		} else {
+			return ast.WalkContinue
+		}
+	}
+
+	if entering {
+		dest := node.ChildByType(ast.NodeLinkDest)
+		destTokens := dest.Tokens
+		if r.Options.Sanitize {
+			tokens := bytes.TrimSpace(destTokens)
+			tokens = bytes.ToLower(tokens)
+			if bytes.HasPrefix(tokens, []byte("javascript:")) {
+				destTokens = nil
+			}
+		}
+		destTokens = r.LinkPath(destTokens)
+		caretInDest := bytes.Contains(destTokens, editor.CaretTokens)
+		if caretInDest {
+			text := node.ChildByType(ast.NodeLinkText)
+			text.Tokens = append(text.Tokens, editor.CaretTokens...)
+			destTokens = bytes.ReplaceAll(destTokens, editor.CaretTokens, nil)
+		}
+		attrs := [][]string{{"href", string(destTokens)}}
+		if title := node.ChildByType(ast.NodeLinkTitle); nil != title && nil != title.Tokens {
+			title.Tokens = bytes.ReplaceAll(title.Tokens, editor.CaretTokens, nil)
+			attrs = append(attrs, []string{"title", string(title.Tokens)})
+		}
+		r.Tag("a class='ficus-filelink'", attrs, false)
+	} else {
+		r.Tag("/a", nil, false)
+	}
 	return ast.WalkContinue
 }
 

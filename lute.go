@@ -17,11 +17,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/render"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/render"
+	"github.com/Dofingert/lute-for-ficus/util"
 	"github.com/gopherjs/gopherjs/js"
 )
 

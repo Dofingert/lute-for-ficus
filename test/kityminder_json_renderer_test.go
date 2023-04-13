@@ -11,10 +11,10 @@
 package test
 
 import (
-	"github.com/88250/lute/ast"
+	"github.com/Dofingert/lute-for-ficus/ast"
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 var kitymindJSONRendererTests = []parseTest{

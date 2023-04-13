@@ -15,9 +15,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/88250/lute"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/render"
+	"github.com/Dofingert/lute-for-ficus"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/render"
 )
 
 type formatTest struct {
@@ -32,15 +32,15 @@ var formatTests = []formatTest{
 	{"52", "[foo](bar \"&quot;baz&quot;\")", "[foo](bar \"&quot;baz&quot;\")\n"},
 	{"51", "[foo](bar \"\\\"baz\\\"\")", "[foo](bar \"&quot;baz&quot;\")\n"},
 
-	// 链接引用格式化改进 https://github.com/88250/lute/issues/36
+	// 链接引用格式化改进 https://github.com/Dofingert/lute-for-ficus/issues/36
 	{"50", "[text][foo]\n\n[foo]: bar\n", "[text][foo]\n\n[foo]: bar\n"},
 	{"49", "[foo]\n\n[foo]: bar\n", "[foo]\n\n[foo]: bar\n"},
 
-	// 格式化支持 Setext 标题 https://github.com/88250/lute/issues/29
+	// 格式化支持 Setext 标题 https://github.com/Dofingert/lute-for-ficus/issues/29
 	{"48", "Setext 标题\n==", "Setext 标题\n===========\n"},
 	{"47", "Setext 标题\n------", "Setext 标题\n-----------\n"},
 
-	// 链接前后自动空格改进 https://github.com/88250/lute/issues/24
+	// 链接前后自动空格改进 https://github.com/Dofingert/lute-for-ficus/issues/24
 	{"46", "中文 [链滴](https://ld246.com) 不需要", "中文 [链滴](https://ld246.com) 不需要\n"},
 	{"45", "数字[1链滴2](https://ld246.com)需要", "数字 [1 链滴 2](https://ld246.com) 需要\n"},
 	{"44", "数字1[HacPai](https://ld246.com)2需要", "数字 1[HacPai](https://ld246.com)2 需要\n"},

@@ -11,7 +11,7 @@
 package parse
 
 import (
-	"github.com/88250/lute/ast"
+	"github.com/Dofingert/lute-for-ficus/ast"
 )
 
 // blockStarts 返回定义好的一系列函数，每个函数用于判断某种块节点是否可以开始。

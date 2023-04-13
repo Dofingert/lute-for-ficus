@@ -13,10 +13,12 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 var markTests = []parseTest{
+
+	{"f1", "-[1](./testmd.md)","<p><a class='ficus-filelink' href=\"./testmd.md\">1</a></p>\n"},
 
 	{"11", "==foo=t= **bar**\n", "<p>==foo=t= <strong>bar</strong></p>\n"},
 	{"10", "*[==foo==*](bar)\n", "<p>*<a href=\"bar\"><mark>foo</mark>*</a></p>\n"},

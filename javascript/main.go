@@ -11,11 +11,11 @@
 package main
 
 import (
-	"github.com/88250/lute"
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
-	"github.com/88250/lute/render"
+	"github.com/Dofingert/lute-for-ficus"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
+	"github.com/Dofingert/lute-for-ficus/render"
 	"github.com/gopherjs/gopherjs/js"
 )
 

@@ -17,12 +17,12 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/88250/lute/html"
+	"github.com/Dofingert/lute-for-ficus/html"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // HtmlRenderer 描述了 HTML 渲染器。
@@ -77,6 +77,8 @@ func NewHtmlRenderer(tree *parse.Tree, options *Options) *HtmlRenderer {
 	ret.RendererFuncs[ast.NodeInlineHTML] = ret.renderInlineHTML
 	ret.RendererFuncs[ast.NodeLink] = ret.renderLink
 	ret.RendererFuncs[ast.NodeImage] = ret.renderImage
+	ret.RendererFuncs[ast.NodeMDlink] = ret.renderMDlink
+	ret.RendererFuncs[ast.NodeCaret] = ret.renderCaret
 	ret.RendererFuncs[ast.NodeBang] = ret.renderBang
 	ret.RendererFuncs[ast.NodeOpenBracket] = ret.renderOpenBracket
 	ret.RendererFuncs[ast.NodeCloseBracket] = ret.renderCloseBracket
@@ -953,6 +955,10 @@ func (r *HtmlRenderer) renderBang(node *ast.Node, entering bool) ast.WalkStatus 
 	return ast.WalkContinue
 }
 
+func (r *HtmlRenderer) renderCaret(node *ast.Node, entering bool) ast.WalkStatus {
+	return ast.WalkContinue
+}
+
 func (r *HtmlRenderer) renderImage(node *ast.Node, entering bool) ast.WalkStatus {
 	if entering {
 		if 0 == r.DisableTags {
@@ -1001,6 +1007,33 @@ func (r *HtmlRenderer) renderImage(node *ast.Node, entering bool) ast.WalkStatus
 			r.Writer.Truncate(idx)
 			r.Writer.Write(imgBuf)
 		}
+	}
+	return ast.WalkContinue
+}
+
+func (r *HtmlRenderer) renderMDlink(node *ast.Node, entering bool) ast.WalkStatus {
+	if entering {
+		r.LinkTextAutoSpacePrevious(node)
+
+		dest := node.ChildByType(ast.NodeLinkDest)
+		destTokens := dest.Tokens
+		if r.Options.Sanitize {
+			tokens := bytes.TrimSpace(destTokens)
+			tokens = bytes.ToLower(tokens)
+			if bytes.HasPrefix(tokens, []byte("javascript:")) {
+				destTokens = nil
+			}
+		}
+		destTokens = r.LinkPath(destTokens)
+		attrs := [][]string{{"href", util.BytesToStr(html.EscapeHTML(destTokens))}}
+		if title := node.ChildByType(ast.NodeLinkTitle); nil != title && nil != title.Tokens {
+			attrs = append(attrs, []string{"title", util.BytesToStr(html.EscapeHTML(title.Tokens))})
+		}
+		r.Tag("a class='ficus-filelink'", attrs, false)
+	} else {
+		r.Tag("/a", nil, false)
+
+		r.LinkTextAutoSpaceNext(node)
 	}
 	return ast.WalkContinue
 }

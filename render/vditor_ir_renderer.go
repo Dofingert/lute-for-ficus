@@ -15,13 +15,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // VditorIRRenderer 描述了 Vditor Instant-Rendering DOM 渲染器。
@@ -76,6 +76,8 @@ func NewVditorIRRenderer(tree *parse.Tree, options *Options) *VditorIRRenderer {
 	ret.RendererFuncs[ast.NodeInlineHTML] = ret.renderInlineHTML
 	ret.RendererFuncs[ast.NodeLink] = ret.renderLink
 	ret.RendererFuncs[ast.NodeImage] = ret.renderImage
+	ret.RendererFuncs[ast.NodeMDlink] = ret.renderMDlink
+	ret.RendererFuncs[ast.NodeCaret] = ret.renderCaret
 	ret.RendererFuncs[ast.NodeBang] = ret.renderBang
 	ret.RendererFuncs[ast.NodeOpenBracket] = ret.renderOpenBracket
 	ret.RendererFuncs[ast.NodeCloseBracket] = ret.renderCloseBracket
@@ -914,6 +916,15 @@ func (r *VditorIRRenderer) renderBang(node *ast.Node, entering bool) ast.WalkSta
 	return ast.WalkContinue
 }
 
+func (r *VditorIRRenderer) renderCaret(node *ast.Node, entering bool) ast.WalkStatus {
+	if entering {
+		r.Tag("span", [][]string{{"class", "vditor-ir__marker"}}, false)
+		r.WriteByte(lex.ItemHyphen)
+		r.Tag("/span", nil, false)
+	}
+	return ast.WalkContinue
+}
+
 func (r *VditorIRRenderer) renderImage(node *ast.Node, entering bool) ast.WalkStatus {
 	needResetCaret := nil != node.Next && ast.NodeText == node.Next.Type && bytes.HasPrefix(node.Next.Tokens, editor.CaretTokens)
 
@@ -965,6 +976,15 @@ func (r *VditorIRRenderer) renderImage(node *ast.Node, entering bool) ast.WalkSt
 		r.Writer.Truncate(idx)
 		r.Writer.Write(imgBuf)
 
+		r.Tag("/span", nil, false)
+	}
+	return ast.WalkContinue
+}
+
+func (r *VditorIRRenderer) renderMDlink(node *ast.Node, entering bool) ast.WalkStatus {
+	if entering {
+		r.renderSpanNode(node)
+	} else {
 		r.Tag("/span", nil, false)
 	}
 	return ast.WalkContinue
@@ -1433,6 +1453,12 @@ func (r *VditorIRRenderer) renderSpanNode(node *ast.Node) {
 	case ast.NodeSub:
 		attrs = append(attrs, []string{"data-type", "sub"})
 	case ast.NodeLink:
+		if 3 != node.LinkType {
+			attrs = append(attrs, []string{"data-type", "a"})
+		} else {
+			attrs = append(attrs, []string{"data-type", "link-ref"})
+		}
+	case ast.NodeMDlink:
 		if 3 != node.LinkType {
 			attrs = append(attrs, []string{"data-type", "a"})
 		} else {

@@ -13,7 +13,7 @@ package render
 import (
 	"bytes"
 
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 func (r *BaseRenderer) LinkPath(dest []byte) []byte {
@@ -58,8 +58,8 @@ func (r *BaseRenderer) isRelativePath(dest []byte) bool {
 		return true
 	}
 
-	if '/' == dest[0] {
-		return false
-	}
-	return !bytes.Contains(dest, []byte(":/")) && !bytes.Contains(dest, []byte(":\\")) && !bytes.Contains(dest, []byte(":%5C"))
+	// if '/' == dest[0] {
+	// 	return false
+	// }
+	return !bytes.Contains(dest, []byte(":/")) /*&& !bytes.Contains(dest, []byte(":\\\\")) */&& !bytes.Contains(dest, []byte(":%5C"))
 }

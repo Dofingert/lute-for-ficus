@@ -13,11 +13,11 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 func TestCodeSyntaxHighlightDetectLang(t *testing.T) {
-	// 围栏代码块自动探测语言 https://github.com/88250/lute/issues/22
+	// 围栏代码块自动探测语言 https://github.com/Dofingert/lute-for-ficus/issues/22
 
 	luteEngine := lute.New()
 	luteEngine.SetCodeSyntaxHighlightDetectLang(true)

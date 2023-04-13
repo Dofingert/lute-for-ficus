@@ -13,7 +13,7 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 var debugTests = []parseTest{
@@ -39,14 +39,14 @@ var debugTests = []parseTest{
 	// Auto link `.app` domain suffix https://github.com/Vanessa219/vditor/issues/936
 	{"52", "https://netlify.app/", "<p><a href=\"https://netlify.app/\">https://netlify.app/</a></p>\n"},
 
-	// 表格和 Setext 标题解析冲突问题 https://github.com/88250/lute/issues/110
+	// 表格和 Setext 标题解析冲突问题 https://github.com/Dofingert/lute-for-ficus/issues/110
 	{"51", "|   foo   | \n| :-----: |\n|   bar   |\n=======\nbaz\n", "<table>\n<thead>\n<tr>\n<th align=\"center\">foo</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td align=\"center\">bar</td>\n</tr>\n</tbody>\n</table>\n<p>=======<br />\nbaz</p>\n"},
 
-	// 表格解析异常 https://github.com/88250/lute/issues/52
+	// 表格解析异常 https://github.com/Dofingert/lute-for-ficus/issues/52
 	{"50", "foo\nname | age |\n---- | ---\n\nbar", "<p>foo</p>\n<table>\n<thead>\n<tr>\n<th>name</th>\n<th>age</th>\n</tr>\n</thead>\n</table>\n<p>bar</p>\n"},
 	{"49", "foo\n| bar |\n| --- |", "<p>foo</p>\n<table>\n<thead>\n<tr>\n<th>bar</th>\n</tr>\n</thead>\n</table>\n"},
 
-	// 自动链接渲染问题 https://github.com/88250/lute/issues/41
+	// 自动链接渲染问题 https://github.com/Dofingert/lute-for-ficus/issues/41
 	{"48", "中 https://foo bar\n", "<p>中 https://foo bar</p>\n"},
 	{"47", "https://中 bar\n", "<p>https://中 bar</p>\n"},
 	{"46", "foo https://” bar\n", "<p>foo https://” bar</p>\n"},
@@ -57,7 +57,7 @@ var debugTests = []parseTest{
 	{"42", "* [x]\n* [x] foo\n", "<ul>\n<li>[x]</li>\n<li class=\"vditor-task vditor-task--done\"><input checked=\"\" disabled=\"\" type=\"checkbox\" /> foo</li>\n</ul>\n"},
 	{"41", "f</\n", "<p>f&lt;/</p>\n"},
 
-	// 自动链接解析结尾 } 问题 https://github.com/88250/lute/issues/4
+	// 自动链接解析结尾 } 问题 https://github.com/Dofingert/lute-for-ficus/issues/4
 	{"40", "https://foo.com/bar}", "<p><a href=\"https://foo.com/bar%7D\">https://foo.com/bar}</a></p>\n"},
 
 	{"39", "[label][] 是 label\n\n[label]: https://b3log.org\n", "<p><a href=\"https://b3log.org\">label</a> 是 label</p>\n"},
@@ -115,7 +115,7 @@ var debugTests = []parseTest{
 	{"9", "<http:\n", "<p>&lt;http:</p>\n"},
 	{"8", "<\n", "<p>&lt;</p>\n"},
 	{"7", "|||\n|||\n", "<p>|||<br />\n|||</p>\n"},
-	{"6", "[https://github.com/88250/lute](https://github.com/88250/lute)\n", "<p><a href=\"https://github.com/88250/lute\">https://github.com/88250/lute</a></p>\n"},
+	{"6", "[https://github.com/Dofingert/lute-for-ficus](https://github.com/Dofingert/lute-for-ficus)\n", "<p><a href=\"https://github.com/Dofingert/lute-for-ficus\">https://github.com/Dofingert/lute-for-ficus</a></p>\n"},
 	{"5", "[1\n--\n", "<h2 id=\"-1\">[1</h2>\n"},
 	{"4", "[1 \n", "<p>[1</p>\n"},
 	{"3", "- -\r\n", "<ul>\n<li>\n<ul>\n<li></li>\n</ul>\n</li>\n</ul>\n"},

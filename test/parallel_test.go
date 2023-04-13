@@ -16,7 +16,7 @@ package test
 //	"sync"
 //	"testing"
 //
-//	"github.com/88250/lute"
+//	"github.com/Dofingert/lute-for-ficus"
 //)
 //
 //func TestParallel(t *testing.T) {

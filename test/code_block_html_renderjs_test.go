@@ -15,7 +15,7 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 var jsCodeBlockTests = []parseTest{

@@ -13,10 +13,13 @@ package test
 import (
 	"testing"
 
-	"github.com/88250/lute"
+	"github.com/Dofingert/lute-for-ficus"
 )
 
 var spinVditorDOMTests = []*parseTest{
+	{"addition1", "<code data-marker=\"`\"><span class=\"vditor-search__result\">hello</span><wbr></code>", "<p data-block=\"0\">\u200b<code data-marker=\"`\">\u200bhello<wbr></code>\u200b</p>"},
+	{"addition2", "<pre><code data-marker=\"`\"><span class=\"vditor-search__result\">hello</span> world<wbr></code></pre>", "<div class=\"vditor-wysiwyg__block\" data-type=\"code-block\" data-block=\"0\" data-marker=\"```\"><pre class=\"vditor-wysiwyg__pre\"><code>hello world<wbr>\n</code></pre><pre class=\"vditor-wysiwyg__preview\" data-render=\"2\"><code>hello world\n</code></pre></div>"},
+	{"addition3", "<code data-marker=\"`\"><span class=\"vditor-search__result\">hello</span> world<wbr></code>", "<p data-block=\"0\">\u200b<code data-marker=\"`\">\u200bhello world<wbr></code>\u200b</p>"},
 
 	{"158", "<form ><iframe/src=\"data:text/html,<script>alert('xss');</script>\"></iframe>", "<div class=\"vditor-wysiwyg__block\" data-type=\"html-block\" data-block=\"0\"><pre><code>&lt;form&gt;&lt;iframe src=&quot;data:text/html,&lt;script&gt;alert('xss');&lt;/script&gt;&quot;&gt;&lt;/iframe&gt;&lt;/form&gt;</code></pre><pre class=\"vditor-wysiwyg__preview\" data-render=\"2\"><form><iframe></iframe></form></pre></div>"},
 	{"157", "<p>[ToC]</p><h1 data-block=\"0\" id=\"wysiwyg-foo--bar1_1\" data-marker=\"#\">foo <code data-marker=\"`\">​&lt;script&gt;</code>​ bar</h1>", "<div class=\"vditor-toc\" data-block=\"0\" data-type=\"toc-block\" contenteditable=\"false\"><ul><li><span data-target-id=\"wysiwyg-foo--bar\">foo <code>&lt;script&gt;</code> bar</span></li></ul></div><h1 data-block=\"0\" id=\"wysiwyg-foo--bar\" data-marker=\"#\">foo <code data-marker=\"`\">\u200b&lt;script&gt;</code>\u200b bar</h1>"},

@@ -12,7 +12,7 @@ package parse
 
 import (
 	"bytes"
-	"github.com/88250/lute/ast"
+	"github.com/Dofingert/lute-for-ficus/ast"
 )
 
 // 判断 Git 冲突标记是否开始。

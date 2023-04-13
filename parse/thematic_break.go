@@ -11,9 +11,9 @@
 package parse
 
 import (
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/lex"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/lex"
 )
 
 // 判断分隔线（--- ***）是否开始。

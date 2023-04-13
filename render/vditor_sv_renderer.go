@@ -15,12 +15,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/88250/lute/editor"
-	"github.com/88250/lute/html"
+	"github.com/Dofingert/lute-for-ficus/editor"
+	"github.com/Dofingert/lute-for-ficus/html"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/parse"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/parse"
 )
 
 // VditorSVRenderer 描述了 Vditor Split-View DOM 渲染器。
@@ -114,6 +114,8 @@ func NewVditorSVRenderer(tree *parse.Tree, options *Options) *VditorSVRenderer {
 	ret.RendererFuncs[ast.NodeInlineHTML] = ret.renderInlineHTML
 	ret.RendererFuncs[ast.NodeLink] = ret.renderLink
 	ret.RendererFuncs[ast.NodeImage] = ret.renderImage
+	ret.RendererFuncs[ast.NodeMDlink] = ret.renderMDlink
+	ret.RendererFuncs[ast.NodeCaret] = ret.renderCaret
 	ret.RendererFuncs[ast.NodeBang] = ret.renderBang
 	ret.RendererFuncs[ast.NodeOpenBracket] = ret.renderOpenBracket
 	ret.RendererFuncs[ast.NodeCloseBracket] = ret.renderCloseBracket
@@ -821,6 +823,15 @@ func (r *VditorSVRenderer) renderBang(node *ast.Node, entering bool) ast.WalkSta
 	return ast.WalkContinue
 }
 
+func (r *VditorSVRenderer) renderCaret(node *ast.Node, entering bool) ast.WalkStatus {
+	if entering {
+		r.Tag("span", [][]string{{"class", "vditor-sv__marker"}}, false)
+		r.WriteByte(lex.ItemHyphen)
+		r.Tag("/span", nil, false)
+	}
+	return ast.WalkContinue
+}
+
 func (r *VditorSVRenderer) renderImage(node *ast.Node, entering bool) ast.WalkStatus {
 	if entering {
 		if 3 == node.LinkType {
@@ -833,6 +844,10 @@ func (r *VditorSVRenderer) renderImage(node *ast.Node, entering bool) ast.WalkSt
 			node.ChildByType(ast.NodeCloseParen).Unlink()
 		}
 	}
+	return ast.WalkContinue
+}
+
+func (r *VditorSVRenderer) renderMDlink(node *ast.Node, entering bool) ast.WalkStatus {
 	return ast.WalkContinue
 }
 

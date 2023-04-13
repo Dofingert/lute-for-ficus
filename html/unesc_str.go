@@ -15,7 +15,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/88250/lute/lex"
+	"github.com/Dofingert/lute-for-ficus/lex"
 )
 
 func UnescapeBytes(tokens []byte) (ret []byte) {

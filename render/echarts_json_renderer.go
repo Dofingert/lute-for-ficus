@@ -13,10 +13,10 @@ package render
 import (
 	"strings"
 
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/util"
+	"github.com/Dofingert/lute-for-ficus/ast"
+	"github.com/Dofingert/lute-for-ficus/lex"
+	"github.com/Dofingert/lute-for-ficus/parse"
+	"github.com/Dofingert/lute-for-ficus/util"
 )
 
 // EChartsJSONRenderer 描述了 ECharts JSON 渲染器。
@@ -47,6 +47,7 @@ func NewEChartsJSONRenderer(tree *parse.Tree, options *Options) Renderer {
 	ret.RendererFuncs[ast.NodeInlineHTML] = ret.renderInlineHTML
 	ret.RendererFuncs[ast.NodeLink] = ret.renderLink
 	ret.RendererFuncs[ast.NodeImage] = ret.renderImage
+	ret.RendererFuncs[ast.NodeMDlink] = ret.renderMDlink
 	ret.RendererFuncs[ast.NodeStrikethrough] = ret.renderStrikethrough
 	ret.RendererFuncs[ast.NodeTaskListItemMarker] = ret.renderTaskListItemMarker
 	ret.RendererFuncs[ast.NodeTable] = ret.renderTable
@@ -272,6 +273,18 @@ func (r *EChartsJSONRenderer) renderStrikethrough(node *ast.Node, entering bool)
 		r.leaf("Strikethrough\ndel", node)
 	}
 	return ast.WalkSkipChildren
+}
+
+func (r *EChartsJSONRenderer) renderMDlink(node *ast.Node, entering bool) ast.WalkStatus {
+	if entering {
+		r.openObj()
+		r.val("MDLink\na", node)
+		r.openChildren(node)
+	} else {
+		r.closeChildren(node)
+		r.closeObj(node)
+	}
+	return ast.WalkContinue
 }
 
 func (r *EChartsJSONRenderer) renderImage(node *ast.Node, entering bool) ast.WalkStatus {
